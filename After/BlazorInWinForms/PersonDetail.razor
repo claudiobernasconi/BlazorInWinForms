@@ -1,0 +1,32 @@
+﻿@using BlazorInWinForms.Services
+@inject IPersonService PersonService
+
+<div style="display: flex; align-items: center;">
+    <div style="margin-right: 10px;">
+        <img style="width: 80px" src="@PersonAvatar" />
+    </div>
+    <div>
+        <b>@Person?.FirstName @Person?.LastName</b><br />
+        @Person?.Role
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int PersonId { get; set; }
+
+    public Person? Person { get; set; }
+    public string PersonAvatar
+    {
+        get
+        {
+            return $"images/avatar_{Person?.PersonId}.png";
+        }
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        Person = PersonService.GetPerson(PersonId);
+        StateHasChanged();
+    }
+}
